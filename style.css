@@ -1,0 +1,74 @@
+/* Container for the logo */
+.sidebar-logo {
+    position: fixed;
+    bottom: 0;
+    padding: 2rem 0.5rem 2rem 0.5rem;
+    z-index: 1000;
+    width: calc(100% - 1rem); /* Account for total padding */
+}
+
+/* Logo image styling */
+.sidebar-logo img {
+    width: calc(100% - 1rem); /* Ensure image stays within sidebar with padding */
+    max-width: 200px; /* Prevent logo from getting too large */
+    height: auto;
+    display: block; /* Ensure proper margin handling */
+}
+
+/* Theme-aware logo display */
+@media (prefers-color-scheme: light) {
+    .studio-mode-logo.light { display: block; }
+    .studio-mode-logo.dark { display: none; }
+}
+@media (prefers-color-scheme: dark) {
+    .studio-mode-logo.light { display: none; }
+    .studio-mode-logo.dark { display: block; }
+}
+
+/* Show light logo in light mode */
+[data-theme="light"] .light-logo {
+    display: block;
+}
+
+[data-theme="light"] .dark-logo {
+    display: none;
+}
+
+/* Show dark logo in dark mode */
+[data-theme="dark"] .dark-logo {
+    display: block;
+}
+
+[data-theme="dark"] .light-logo {
+    display: none;
+}
+
+/* Hide logo when screen is too small */
+@media screen and (max-width: 768px) {
+    .fixed-logo-container {
+        display: none;
+    }
+}
+
+[data-testid="stSidebarNav"] {
+    background-image: url('assets/Logo Studio.png');
+    background-repeat: no-repeat;
+    background-position: 20px 20px;
+    background-size: 100px auto;
+}
+
+[data-testid="stSidebarNav"]::before {
+    content: "";
+    margin-bottom: 100px;
+    display: block;
+}
+
+/* Dark mode logo */
+[data-testid="stSidebarNav"].dark {
+    background-image: url('assets/Logo Sparkle.png');
+}
+
+/* Adjust sidebar padding to accommodate logo */
+.st-emotion-cache-1cypcdb {
+    padding-top: 120px !important;
+} 
