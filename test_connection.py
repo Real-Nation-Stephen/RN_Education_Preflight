@@ -10,7 +10,10 @@ def test_connection():
         # Set up credentials
         creds = service_account.Credentials.from_service_account_info(
             json.loads(base64.b64decode(st.secrets["gcp_creds"])),
-            scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"]
+            scopes=[
+                "https://www.googleapis.com/auth/spreadsheets",
+                "https://www.googleapis.com/auth/drive"
+            ]
         )
         client = gspread.authorize(creds)
         
@@ -29,6 +32,10 @@ def test_connection():
     except Exception as e:
         print("❌ Connection failed!")
         print(f"Error: {str(e)}")
+        print(f"Error type: {type(e).__name__}")
+        import traceback
+        print("Full traceback:")
+        print(traceback.format_exc())
 
 if __name__ == "__main__":
     test_connection() 

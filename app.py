@@ -504,7 +504,10 @@ if check_password():
         # Uses credentials from Streamlit secrets
         creds = service_account.Credentials.from_service_account_info(
             json.loads(base64.b64decode(st.secrets["gcp_creds"])),
-            scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"]
+            scopes=[
+                "https://www.googleapis.com/auth/spreadsheets",
+                "https://www.googleapis.com/auth/drive"
+            ]
         )
         client = gspread.authorize(creds)
         sheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1VJ7Ox1MNVkWx4nTaVW4ifoYWcKb4eq7GovgpLNX4wfo/edit")
@@ -517,7 +520,8 @@ if check_password():
         client_df = load_client_rules()
         client_names = client_df["Client"].unique().tolist()
     except Exception as e:
-        st.error("Error loading Google Sheet. Using fallback client list.")
+        st.error(f"Error loading Google Sheet: {str(e)}")
+        st.error("Using fallback client list.")
         client_names = ["AL4L", "Demo Client"]
 
     selected_client = st.selectbox("Optional: Select a client for custom rules", ["None"] + client_names)
