@@ -1,12 +1,17 @@
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+import streamlit as st
+import json
+import base64
+from google.oauth2 import service_account
 
 def test_connection():
     print("Testing Google Sheets connection...")
     try:
         # Set up credentials
-        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+        creds = service_account.Credentials.from_service_account_info(
+            json.loads(base64.b64decode(st.secrets["gcp_creds"])),
+            scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"]
+        )
         client = gspread.authorize(creds)
         
         # Try to open the sheet

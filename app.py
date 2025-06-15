@@ -4,7 +4,9 @@ import docx
 import fitz  # PyMuPDF for PDFs
 import re
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+import json
+import base64
+from google.oauth2 import service_account
 from io import BytesIO
 from review_interface import ReviewInterface, SuggestedFix
 from spellchecker import SpellChecker
@@ -499,9 +501,11 @@ if check_password():
 
     # === STEP 2: LOAD CLIENT RULES FROM GOOGLE SHEETS ===
     def load_client_rules():
-        # Uses a local credentials file (replace with your JSON credentials)
-        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+        # Uses credentials from Streamlit secrets
+        creds = service_account.Credentials.from_service_account_info(
+            json.loads(base64.b64decode(st.secrets["gcp_creds"])),
+            scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"]
+        )
         client = gspread.authorize(creds)
         sheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1VJ7Ox1MNVkWx4nTaVW4ifoYWcKb4eq7GovgpLNX4wfo/edit")
         worksheet = sheet.get_worksheet(0)
